@@ -68,6 +68,7 @@ clickHoldTIme='10'
 
 def mainWindow():
         mainWin = CTk()
+        mainWin.config(cursor='tcross')
         CTk.title(mainWin,'Auto Clicker v1.2.3')
         def start():
             global isRunning
@@ -94,17 +95,19 @@ def mainWindow():
                 infinite=False
         def openSettings():
             settingsWin=CTk()
+            settingsWin.config(cursor='tcross')
+            settingsWin.geometry('630x450')
             def updateValue():
                 if setClickFreq.get()!='':
                     global clickFrequency
                     clickFrequency=setClickFreq.get()
                     clickFreqValue.set('Current: '+ clickFrequency +'ms')
                     clickFreqValueLabel.configure(text=f'Current: {clickFrequency}ms')
-                if setMouseButton.get()!='':
-                    global mouseButton
-                    mouseButton=setMouseButton.get()
-                    mouseButtonValue.set('Current: '+mouseButton)
-                    mouseButtonValueLabel.configure(text=f'Current: {mouseButton}')
+                #if setMouseButton.get()!='':
+                #    global mouseButton
+                #    mouseButton=setMouseButton.get()
+                #    mouseButtonValue.set('Current: '+mouseButton)
+                #    mouseButtonValueLabel.configure(text=f'Current: {mouseButton}')
                 if setClickTimes.get()!='':
                     global clickAmount
                     clickAmount=setClickTimes.get()
@@ -124,7 +127,24 @@ def mainWindow():
                 outputPosValue.configure(text=f'Current: {str(outputPos)}')
                 infiniteValueLabel.configure(text=f'Current: {str(infinite)}')
             frame=CTkFrame(master=settingsWin)
-            frame.grid(padx=30,pady=20)
+            frame.grid(padx=5,pady=5,row=0,column=0)
+            frame1=CTkFrame(master=settingsWin)
+            frame1.grid(padx=5,pady=5,row=1,column=0)
+            frame2=CTkFrame(master=settingsWin)
+            frame2.grid(padx=5,pady=5,row=0,column=1)
+            frame3=CTkFrame(master=settingsWin)
+            frame3.grid(padx=5,pady=5,row=1,column=1)
+            frame4=CTkFrame(master=settingsWin)
+            frame4.grid(padx=5,pady=5,row=0,column=2)
+            frame5=CTkFrame(master=settingsWin)
+            frame5.grid(padx=5,pady=5,row=1,column=2)
+            frame5.grid_propagate(False)
+            frame4.grid_propagate(False)
+            frame3.grid_propagate(False)
+            frame2.grid_propagate(False)
+            frame1.grid_propagate(False)
+            frame.grid_propagate(False)
+
             
             #OPos Stuff (grid 0)   
             global setOutputPos,outputPos    
@@ -133,61 +153,75 @@ def mainWindow():
             oposValue=StringVar()
             oposValue.set('Current: True')
             outputPosValue=CTkLabel(frame, text=f'Current: {str(outputPos)}',text_font=('roboto',15))
+            oposLabel=CTkLabel(frame,text='Output Position',text_font=('roboto',15))
 
             #clickFreq Stuff
-            setClickFreq=CTkEntry(frame,width=150,placeholder_text='Click Frequency...') 
+            setClickFreq=CTkEntry(frame1,width=150,placeholder_text='Click Frequency...') 
             clickFreqValue=StringVar()
             clickFreqValue.set(f'Current: {clickFrequency}ms')
-            clickFreqValueLabel=CTkLabel(frame, text=clickFreqValue.get(),text_font=('roboto',15))
+            clickFreqValueLabel=CTkLabel(frame1, text=clickFreqValue.get(),text_font=('roboto',15))
+            clickFreqLabel=CTkLabel(frame1,text='Click Frequency',text_font=('roboto',15))
 
             #mouseButton stuff
-            setMouseButton=CTkEntry(frame,width=150,placeholder_text='') 
-            mouseButtonValue=StringVar()
-            mouseButtonValue.set('Current: ' + mouseButton)
-
-            mouseButtonValueLabel=CTkLabel(frame, text=mouseButtonValue.get(),text_font=('roboto',15))
+            #setMouseButton=CTkEntry(frame,width=150,placeholder_text='') 
+            #mouseButtonValue=StringVar()
+            #mouseButtonValue.set('Current: ' + mouseButton)
+            #mouseButtonValueLabel=CTkLabel(frame, text=mouseButtonValue.get(),text_font=('roboto',15))
 
             #clickTimes Stuff
-            setClickTimes=CTkEntry(frame,width=150,placeholder_text='Click Times...') 
+            setClickTimes=CTkEntry(frame2,width=150,placeholder_text='Click Times...') 
             clickTimesValue=StringVar()
             clickTimesValue.set(f'Current: {clickAmount} times')
-            clickTimesValueLabel=CTkLabel(frame, text=clickTimesValue.get(),text_font=('roboto',15))
+            clickTimesValueLabel=CTkLabel(frame2, text=clickTimesValue.get(),text_font=('roboto',15))
+            clickTimesLabel=CTkLabel(frame2,text='Click Times',text_font=('roboto',15))
 
             #infinite Stuff (grid 0)
-            infTrue=CTkButton(frame,text='True',command=lambda: setTrue(infiniteValue,'infinite'))
-            infFalse=CTkButton(frame,text='False',command=lambda: setFalse(infiniteValue,'infinite')) 
+            infTrue=CTkButton(frame3,text='True',command=lambda: setTrue(infiniteValue,'infinite'))
+            infFalse=CTkButton(frame3,text='False',command=lambda: setFalse(infiniteValue,'infinite')) 
             infiniteValue=StringVar()
             infiniteValue.set('Current: False')
-            infiniteValueLabel=CTkLabel(frame, text=f'Current: {str(infinite)}',text_font=('roboto',15))
+            infiniteValueLabel=CTkLabel(frame3, text=f'Current: {str(infinite)}',text_font=('roboto',15))
+            infiniteLabel=CTkLabel(frame3,text='Infinite',text_font=('roboto',15))
+            
             #startKey Stuff
-            setstartKey=CTkEntry(frame,width=150,placeholder_text='Start Key...') 
+            setstartKey=CTkEntry(frame4,width=150,placeholder_text='Start Key...') 
             startKeyValue=StringVar()
             startKeyValue.set('Current: ' + startKey)
-            startKeyValueLabel=CTkLabel(frame, text=startKeyValue.get(),text_font=('roboto',15))
+            startKeyValueLabel=CTkLabel(frame4, text=startKeyValue.get(),text_font=('roboto',15))
+            startKeyLabel=CTkLabel(frame4,text='Start Hotkey',text_font=('roboto',15))
 
             #stopKey Stuff
-            setstopKey=CTkEntry(frame,width=150,placeholder_text='Stop Key...') 
+            setstopKey=CTkEntry(frame5,width=150,placeholder_text='Stop Key...') 
             stopKeyValue=StringVar()
             stopKeyValue.set('Current: ' + stopKey)
-            stopKeyValueLabel=CTkLabel(frame, text=stopKeyValue.get(),text_font=('roboto',15))
-            updateValues=CTkButton(frame, text='Update Values', command=updateValue)
-            
-            outputPosValue.grid(row=0,column=1)
-            opsTrue.grid(row=1,column=0)
-            opsFalse.grid(row=1,column=2)
-            clickFreqValueLabel.grid(row=2,column=0)
-            setClickFreq.grid(row=3,column=0)
+            stopKeyValueLabel=CTkLabel(frame5, text=stopKeyValue.get(),text_font=('roboto',15))
+            stopKeyLabel=CTkLabel(frame5,text='Stop Hotkey',text_font=('roboto',15))
+
+            updateValues=CTkButton(settingsWin, text='Update Values', command=updateValue,border_color='blue',fg_color='black',border_width=1)
+
+            oposLabel.grid(row=0,column=0,padx=30,pady=10)
+            outputPosValue.grid(row=1,column=0,padx=30,pady=10)
+            opsTrue.grid(row=2,column=0,padx=30,pady=10)
+            opsFalse.grid(row=3,column=0,padx=30,pady=10)
+            clickFreqLabel.grid(row=1,column=0,padx=30,pady=10)
+            clickFreqValueLabel.grid(row=2,column=0,padx=30,pady=10)
+            setClickFreq.grid(row=3,column=0,padx=30,pady=10)
             #mouseButtonValueLabel.grid(row=2,column=1)
-            clickTimesValueLabel.grid(row=4,column=0)
-            setClickTimes.grid(row=5,column=0)
-            infiniteValueLabel.grid(row=6,column=1)
-            infTrue.grid(row=7,column=0)
-            infFalse.grid(row=7,column=2)
-            startKeyValueLabel.grid(row=8,column=0)
-            setstartKey.grid(row=9,column=0)
-            stopKeyValueLabel.grid(row=10,column=0)
-            setstopKey.grid(row=11,column=0)
-            updateValues.grid(row=12,column=1)
+            clickTimesLabel.grid(row=3,column=0,padx=30,pady=10)
+            clickTimesValueLabel.grid(row=4,column=0,padx=10,pady=10)
+            setClickTimes.grid(row=5,column=0,padx=15,pady=10)
+            infiniteLabel.grid(row=0,column=0,padx=30,pady=10)
+            infiniteValueLabel.grid(row=1,column=0,padx=30,pady=10)
+            infTrue.grid(row=2,column=0,padx=30,pady=10)
+            infFalse.grid(row=3,column=0,pady=10)
+            startKeyLabel.grid(row=7,column=0,padx=30,pady=10)
+            startKeyValueLabel.grid(row=8,column=0,padx=30,pady=10)
+            setstartKey.grid(row=9,column=0,padx=30,pady=10)
+            stopKeyLabel.grid(row=9,column=0,padx=30,pady=10)
+            stopKeyValueLabel.grid(row=10,column=0,padx=20,pady=10)
+            setstopKey.grid(row=11,column=0,padx=30,pady=10)
+            
+            updateValues.grid(row=4,column=1)
             settingsWin.mainloop()
         #intial stuff
         mainFrame=CTkFrame(master=mainWin,bg_color="gray")
