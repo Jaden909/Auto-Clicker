@@ -8,6 +8,9 @@ isRunning=0
 clickTimes=0
 #Number of times the 'trackMouse' function has been called
 infiniteBool='false'
+colorMain,colorMainOutline,colorMainHover='#1F6AA5','',''
+colorNeg,colorNegOutline,colorNegHover='#c44c43','','#61221e'
+colorPos,colorPosOutline,colorPosHover='#1c9e39','#0a3814','#136926'
 
 """______________________________________________________________________________Changelog_____________________________________________________________________________"""
 
@@ -69,7 +72,7 @@ clickHoldTIme='10'
 def mainWindow():
         mainWin = CTk()
         mainWin.config(cursor='tcross')
-        CTk.title(mainWin,'Auto Clicker v1.2.3')
+        CTk.title(mainWin,'Auto Clicker v1.3')
         def start():
             global isRunning
             isRunning=1
@@ -97,6 +100,9 @@ def mainWindow():
             settingsWin=CTk()
             settingsWin.config(cursor='tcross')
             settingsWin.geometry('630x450')
+            def settingsExit():
+                updateValue()
+                settingsWin.destroy()
             def updateValue():
                 if setClickFreq.get()!='':
                     global clickFrequency
@@ -148,13 +154,13 @@ def mainWindow():
             
             #OPos Stuff (grid 0)   
             global setOutputPos,outputPos    
-            opsTrue=CTkButton(frame,text='True',command=lambda: setTrue(oposValue,'outputPos'))
-            opsFalse=CTkButton(frame,text='False',command=lambda: setFalse(oposValue,'outputPos'))    
+            opsTrue=CTkButton(frame,text='True',command=lambda: setTrue(oposValue,'outputPos'),fg_color=colorMain)
+            opsFalse=CTkButton(frame,text='False',command=lambda: setFalse(oposValue,'outputPos'),fg_color=colorMain)    
             oposValue=StringVar()
             oposValue.set('Current: True')
             outputPosValue=CTkLabel(frame, text=f'Current: {str(outputPos)}',text_font=('roboto',15))
             oposLabel=CTkLabel(frame,text='Output Position',text_font=('roboto',15))
-
+            print(opsTrue.fg_color)
             #clickFreq Stuff
             setClickFreq=CTkEntry(frame1,width=150,placeholder_text='Click Frequency...') 
             clickFreqValue=StringVar()
@@ -176,8 +182,8 @@ def mainWindow():
             clickTimesLabel=CTkLabel(frame2,text='Click Times',text_font=('roboto',15))
 
             #infinite Stuff (grid 0)
-            infTrue=CTkButton(frame3,text='True',command=lambda: setTrue(infiniteValue,'infinite'))
-            infFalse=CTkButton(frame3,text='False',command=lambda: setFalse(infiniteValue,'infinite')) 
+            infTrue=CTkButton(frame3,text='True',command=lambda: setTrue(infiniteValue,'infinite'),fg_color=colorMain)
+            infFalse=CTkButton(frame3,text='False',command=lambda: setFalse(infiniteValue,'infinite'),fg_color=colorMain) 
             infiniteValue=StringVar()
             infiniteValue.set('Current: False')
             infiniteValueLabel=CTkLabel(frame3, text=f'Current: {str(infinite)}',text_font=('roboto',15))
@@ -197,7 +203,8 @@ def mainWindow():
             stopKeyValueLabel=CTkLabel(frame5, text=stopKeyValue.get(),text_font=('roboto',15))
             stopKeyLabel=CTkLabel(frame5,text='Stop Hotkey',text_font=('roboto',15))
 
-            updateValues=CTkButton(settingsWin, text='Update Values', command=updateValue,border_color='blue',fg_color='black',border_width=1)
+            updateValues=CTkButton(settingsWin, text='Update Values', command=updateValue,border_color=colorPosOutline,fg_color=colorPos,border_width=1,hover_color=colorPosHover)
+            settingsExitButton=CTkButton(settingsWin,text='Exit',command=settingsExit,border_color=colorNegOutline,fg_color=colorNeg,border_width=1,hover_color=colorNegHover)
 
             oposLabel.grid(row=0,column=0,padx=30,pady=10)
             outputPosValue.grid(row=1,column=0,padx=30,pady=10)
@@ -221,24 +228,25 @@ def mainWindow():
             stopKeyValueLabel.grid(row=10,column=0,padx=20,pady=10)
             setstopKey.grid(row=11,column=0,padx=30,pady=10)
             
-            updateValues.grid(row=4,column=1)
+            updateValues.grid(row=4,column=2)
+            settingsExitButton.grid(row=4,column=0)
             settingsWin.mainloop()
         #intial stuff
         mainFrame=CTkFrame(master=mainWin,bg_color="gray")
         mainFrame.pack(fill='both',padx=20,pady=15)
-        title= CTkLabel(master=mainFrame, text= 'Auto Clicker v1.2.3',text_font=('roboto',30))
+        title= CTkLabel(master=mainFrame, text= 'Auto Clicker v1.3',text_font=('roboto',30))
         credit= CTkLabel(master=mainFrame, text='By Jaden909',text_font=('roboto',18))
         mainWin.geometry("550x300")
-        startButton = CTkButton(master=mainFrame, text = 'Start Auto Clicker', command = start)
+        startButton = CTkButton(master=mainFrame, text = 'Start Auto Clicker', command = start,fg_color=colorPos,hover_color=colorPosHover)
         changelog=CTkLabel(master=mainFrame, text= """Patch Notes:
-         v1.2.3 Switched to using customtkinter for a modernized look""", wraplength=520)
+         v1.3 Rewrote UI to be WAY better""", wraplength=520)
         global clickFrequency
         clickFrequency=str(clickFrequency)
         global clickAmount
         clickAmount=str(clickAmount)
         NOTE=CTkLabel(master=mainFrame, text="NOTE: Press ESC to bring this window back up after it is closed", wraplength=520)
-        exitButton=CTkButton(master=mainFrame, text='Exit',command=exitScript)
-        settingsButton=CTkButton(master=mainFrame,text='Settings',command=openSettings)
+        exitButton=CTkButton(master=mainFrame, text='Exit',command=exitScript,fg_color=colorNeg,hover_color=colorNegHover)
+        settingsButton=CTkButton(master=mainFrame,text='Settings',command=openSettings,fg_color=colorMain)
         setinfinite=None
         title.pack()
         credit.pack()
