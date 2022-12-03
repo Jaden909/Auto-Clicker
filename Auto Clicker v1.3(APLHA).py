@@ -132,6 +132,11 @@ def mainWindow():
                     stopKeyValueLabel.configure(text=f'Current: {stopKey}')
                 outputPosValue.configure(text=f'Current: {str(outputPos)}')
                 infiniteValueLabel.configure(text=f'Current: {str(infinite)}')
+            def advSettings():
+                advSettingsWin=CTk()
+                tempLabel=CTkLabel(master=advSettingsWin,text='Coming Soon',text_font=('roboto',30))
+                tempLabel.pack()
+                advSettingsWin.mainloop()
             frame=CTkFrame(master=settingsWin)
             frame.grid(padx=5,pady=5,row=0,column=0)
             frame1=CTkFrame(master=settingsWin)
@@ -205,6 +210,7 @@ def mainWindow():
 
             updateValues=CTkButton(settingsWin, text='Update Values', command=updateValue,border_color=colorPosOutline,fg_color=colorPos,border_width=1,hover_color=colorPosHover)
             settingsExitButton=CTkButton(settingsWin,text='Exit',command=settingsExit,border_color=colorNegOutline,fg_color=colorNeg,border_width=1,hover_color=colorNegHover)
+            advSettingsButton=CTkButton(settingsWin,text='Advanced Settings',command=advSettings)
 
             oposLabel.grid(row=0,column=0,padx=30,pady=10)
             outputPosValue.grid(row=1,column=0,padx=30,pady=10)
@@ -230,6 +236,7 @@ def mainWindow():
             
             updateValues.grid(row=4,column=2)
             settingsExitButton.grid(row=4,column=0)
+            advSettingsButton.grid(row=4,column=1)
             settingsWin.mainloop()
         #intial stuff
         mainFrame=CTkFrame(master=mainWin,bg_color="gray")
@@ -269,9 +276,7 @@ def trackMouse():
         clickTimes=clickTimes+1
     else:  
         clickTimes=clickTimes-1
-clickTimes=int(clickTimes)
-clickAmount=int(clickAmount)
-while clickTimes<clickAmount+1: 
+while int(clickTimes)<int(clickAmount)+1: 
     clickFrequency=int(clickFrequency)
     if keyboard.is_pressed(startKey):
         isRunning=1
@@ -286,7 +291,7 @@ while clickTimes<clickAmount+1:
         mainWindow()    
     if isRunning==1:
         trackMouse()
-        pyautogui.click(currentMouseX,currentMouseY,button=mouseButton,interval=clickFrequency/1000)
+        pyautogui.click(currentMouseX,currentMouseY,button=mouseButton,interval=int(clickFrequency)/1000)
         if outputPos==True:
             print(currentMouseX,currentMouseY)  
         else: pass
