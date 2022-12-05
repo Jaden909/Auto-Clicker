@@ -1,5 +1,4 @@
-import pyautogui
-import keyboard
+import pyautogui,keyboard
 from customtkinter import *
 #Required modules for auto clicker to work
 global isRunning
