@@ -293,4 +293,4 @@ while int(clickTimes)<int(clickAmount)+1:
         pyautogui.click(currentMouseX,currentMouseY,button=mouseButton,interval=int(clickFrequency)/1000)
         if outputPos==True:
             print(currentMouseX,currentMouseY)  
-        else: pass
+        
