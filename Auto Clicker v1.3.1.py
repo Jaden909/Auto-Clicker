@@ -1,4 +1,4 @@
-import pyautogui,keyboard
+import pyautogui,keyboard,time
 from customtkinter import *
 #Required modules for auto clicker to work
 global isRunning
@@ -60,11 +60,11 @@ stopKey='pagedown'
 winKey='esc'
 #Hotkey to open the main window (Advanced Setting)
 
-clickMode='click'
-#How the autoclicker clicks (click or hold)[NOT YET IMPLEMENTED] (Advanced Setting)
+clickMode='Click'
+#How the autoclicker clicks (click or hold) (Advanced Setting)
 
-clickHoldTIme='10'
-#How long to hold click (hold mode only)[NOT YET IMPLEMENTED] (Advanced Setting)
+clickHoldTime='10'
+#How long to hold click (hold mode only) (Advanced Setting)
 
 """_________________________________________________________________________________UI________________________________________________________________________________"""
 
@@ -132,9 +132,43 @@ def mainWindow():
                 outputPosValue.configure(text=f'Current: {str(outputPos)}')
                 infiniteValueLabel.configure(text=f'Current: {str(infinite)}')
             def advSettings():
+                def cmClick():
+                    global clickMode
+                    clickMode='Click'
+                    cmValue.set(clickMode)
+                    cmValueLab.configure(text=f'Current: {str(clickMode)}')
+                def cmHold():
+                    global clickMode
+                    clickMode='Hold'
+                    cmValue.set(clickMode)
+                    cmValueLab.configure(text=f'Current: {str(clickMode)}')
                 advSettingsWin=CTk()
-                tempLabel=CTkLabel(master=advSettingsWin,text='Coming Soon',text_font=('roboto',30))
-                tempLabel.pack()
+                advSettingsWin.geometry('420x420')
+                aframe=CTkFrame(master=advSettingsWin)
+                aframe.grid(padx=5,pady=5,row=0,column=0)
+                aframe1=CTkFrame(master=advSettingsWin)
+                aframe1.grid(padx=5,pady=5,row=1,column=0)
+                aframe2=CTkFrame(master=advSettingsWin)
+                aframe2.grid(padx=5,pady=5,row=0,column=1)
+                aframe3=CTkFrame(master=advSettingsWin)
+                aframe3.grid(padx=5,pady=5,row=1,column=1)
+                aframe3.grid_propagate(False)
+                aframe2.grid_propagate(False)
+                aframe1.grid_propagate(False)
+                aframe.grid_propagate(False)
+
+                global clickMode   
+                cmTrue=CTkButton(aframe,text='Hold',command=cmHold,fg_color=colorMain)
+                cmFalse=CTkButton(aframe,text='Click',command=cmClick,fg_color=colorMain)    
+                cmValue=StringVar()
+                cmValue.set('Current: Click')
+                cmValueLab=CTkLabel(aframe, text=f'Current: {str(clickMode)}',text_font=('roboto',15))
+                cmLabel=CTkLabel(aframe,text='Click Mode',text_font=('roboto',15))
+                
+                cmLabel.grid(row=0,column=0,padx=30,pady=10)
+                cmValueLab.grid(row=1,column=0,padx=30,pady=10)
+                cmTrue.grid(row=2,column=0,padx=30,pady=10)
+                cmFalse.grid(row=3,column=0,padx=30,pady=10)
                 advSettingsWin.mainloop()
             frame=CTkFrame(master=settingsWin)
             frame.grid(padx=5,pady=5,row=0,column=0)
@@ -164,7 +198,7 @@ def mainWindow():
             oposValue.set('Current: True')
             outputPosValue=CTkLabel(frame, text=f'Current: {str(outputPos)}',text_font=('roboto',15))
             oposLabel=CTkLabel(frame,text='Output Position',text_font=('roboto',15))
-            print(opsTrue.fg_color)
+            
             #clickFreq Stuff
             setClickFreq=CTkEntry(frame1,width=150,placeholder_text='Click Frequency...') 
             clickFreqValue=StringVar()
@@ -267,29 +301,36 @@ def mainWindow():
 mainWindow()
 
 def trackMouse():
-    global currentMouseX, currentMouseY
+    global currentMouseX, currentMouseY, clickTimes
     currentMouseX, currentMouseY=pyautogui.position()
-    global clickTimes
     if infinite:
-        clickTimes+=1
-    else:  
         clickTimes-=1
-while int(clickTimes)<int(clickAmount)+1: 
-    clickFrequency=int(clickFrequency)
-    if keyboard.is_pressed(startKey):
-        isRunning=1
-    if keyboard.is_pressed(stopKey):
-        isRunning=0
-        clickFrequency=int(clickFrequency)
-    if keyboard.is_pressed(winKey):
-        mainWindow()
-    if clickTimes==clickAmount:
-        clickTimes=0
-        isRunning=0
-        mainWindow()    
-    if isRunning==1:
+    else:  
+        clickTimes+=1
+if isRunning:    
+    if clickMode=='Hold':
         trackMouse()
-        pyautogui.click(currentMouseX,currentMouseY,button=mouseButton,interval=int(clickFrequency)/1000)
-        if outputPos==True:
-            print(currentMouseX,currentMouseY)  
+        pyautogui.PAUSE=10
+        pyautogui.mouseDown(currentMouseX,currentMouseY,button=mouseButton)
+        pyautogui.PAUSE=0
+        pyautogui.mouseUp(currentMouseX,currentMouseY,button=mouseButton)
+    else:    
+        while int(clickTimes)<int(clickAmount)+1: 
+            clickFrequency=int(clickFrequency)
+            if keyboard.is_pressed(startKey):
+                isRunning=1
+            if keyboard.is_pressed(stopKey):
+                isRunning=0
+                clickFrequency=int(clickFrequency)
+            if keyboard.is_pressed(winKey):
+                mainWindow()
+            if clickTimes==clickAmount:
+                clickTimes=0
+                isRunning=0
+                mainWindow()    
+            if isRunning==1:
+                trackMouse()
+                pyautogui.click(currentMouseX,currentMouseY,button=mouseButton,interval=int(clickFrequency)/1000)
+                if outputPos==True:
+                    print(currentMouseX,currentMouseY)  
         
