@@ -30,6 +30,7 @@ colorPos,colorPosOutline,colorPosHover='#1c9e39','#0a3814','#136926'
 # v1.2 Added ability to change click times, infinite mode, start key, and stop key (via UI), not changing all settings and attempting to update values no longer throws a error and works as expected, increased window size to accomodate new UI elements
 # v1.2.1 Window can now be opened with a key seperate from the stop key, 1.2 bug fixes
 # v1.2.2 Finally got the exit button to work somehow
+# v1.3 Rewrote UI to be way better
 
 # Planned feature: Ability to manually select coordinates for autoclicker
 # Planned feature: Ability to hold down click
@@ -63,7 +64,7 @@ winKey='esc'
 clickMode='Click'
 #How the autoclicker clicks (click or hold) (Advanced Setting)
 
-clickHoldTime='10'
+clickHoldTime=10
 #How long to hold click (hold mode only) (Advanced Setting)
 
 """_________________________________________________________________________________UI________________________________________________________________________________"""
@@ -309,11 +310,12 @@ def trackMouse():
         clickTimes+=1
 if isRunning:    
     if clickMode=='Hold':
+        time.sleep(1)
         trackMouse()
-        pyautogui.PAUSE=10
-        pyautogui.mouseDown(currentMouseX,currentMouseY,button=mouseButton)
-        pyautogui.PAUSE=0
-        pyautogui.mouseUp(currentMouseX,currentMouseY,button=mouseButton)
+        pyautogui.mouseDown(button=mouseButton)
+        time.sleep(clickHoldTime)
+        pyautogui.mouseUp(button=mouseButton)
+        mainWindow()
     else:    
         while int(clickTimes)<int(clickAmount)+1: 
             clickFrequency=int(clickFrequency)
